@@ -33,3 +33,30 @@ return cy.get(iframe)
 .should('be.visible')
 .then(cy.wrap);
 })
+
+// custom command for clicking on link using label
+Cypress.Commands.add('clickLink', (label) => {
+    cy.get('a').contains(label, { matchCase: false }).click(); // it will aviod case sensitive if we remove matchcase it will match with case sensetivie
+})
+
+//over write contains method - its not working
+Cypress.Commands.add('Mycontains',(originalFn, subject, filter, text, options = {})=>{
+    // determine if a filter argument was passed
+    if(typeof text == 'object'){
+        options = text
+        text = filter
+        filter = undefined
+    }
+
+    options.matchCase = false
+    return originalFn(subject, filter, text, options)
+}) 
+
+// custom command for Login
+Cypress.Commands.add('Loginapp',(email,password)=>{
+
+    cy.get('#input-username').clear().type('demo')
+    cy.get('#input-password').clear().type('demo')
+    cy.get('[type="submit"]').click();
+})
+  
